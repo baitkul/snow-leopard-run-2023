@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+
+  <style>
+    #box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    #box div {
+      width: 100%;
+      flex-shrink: 1;
+      position: relative;
+    }
+
+    #box span {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    @media (min-width: 600px) {
+      #box {
+        gap: 16px;
+      }
+
+      #box div {
+        width: calc(50% - 16px);
+      }
+    }
+
+    @media (min-width: 1025px) {
+      #box div {
+        width: calc(33.333333% - 16px);
+      }
+    }
+  </style>
+
+  <body>
+    <div id="box" style="display: flex; flex-wrap: wrap; gap: 16px"></div>
+
+    <script type="module">
+      const run = async () => {
+        const { default: data } = await import('./data.json', {
+          assert: {
+            type: 'json'
+          }
+        })
+
+        const box = document.getElementById('box')
+
+        for (let i = 0; i < data.length; i++) {
+          const item = data[i]
+
+          const div = document.createElement('div')
+          const span = document.createElement('span')
+          span.appendChild(document.createTextNode(i + 1))
+
+          const img = new Image()
+          img.style.height = 'auto'
+          img.style.width = '100%'
+          img.setAttribute('src', item.resources.watermark)
+          img.setAttribute('async', '')
+          img.setAttribute('loading', 'lazy')
+
+          div.appendChild(img)
+          div.appendChild(span)
+
+          box.appendChild(div)
+        }
+      }
+
+      run()
+    </script>
+  </body>
+</html>
